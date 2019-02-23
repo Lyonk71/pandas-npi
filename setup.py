@@ -7,7 +7,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 
-setup(name='pandas_dedupe',
+setup(name='pandas_npi',
       version='0.10',
       description='NPI validation made easy with Pandas.',
       url='https://github.com/Lyonk71/pandas-npi',

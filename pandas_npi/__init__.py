@@ -41,7 +41,7 @@ def clear_previous(df):
     except:
         return df
 
-def validate(df, npi_field, name_field=None, nppes_path='nppes.csv'):
+def validate(df, npi_field, nppes_path='nppes.csv'):
     df = clear_previous(df)
     df_nppes = pd.read_csv(nppes_path, usecols=fields, dtype=str)
     df_nppes['nppes_name'] = df_nppes['Provider Organization Name (Legal Business Name)'].fillna('') + df_nppes['Provider First Name'].fillna('') + " " + df_nppes['Provider Last Name (Legal Name)'].fillna('')
