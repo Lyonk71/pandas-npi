@@ -37,13 +37,15 @@ def remove_filler_npi(x):
         return x
     
 fields = ['NPI',
-          'Entity Type Code',
           'nppes_name',
-          'NPI Deactivation Date']
-        
+          'nppes_type',
+          'nppes_status',
+          'nppes_deactivation_date']
+
+
 def clear_previous(df):
     try:
-        return df.drop(columns=['Entity Type Code', 'nppes_name'])
+        return df.drop(columns=['nppes_name', 'nppes_type', 'nppes_status', 'nppes_deactivation_date'])
     except:
         return df
 
@@ -56,5 +58,5 @@ def validate(df, npi_field, nppes_path=nppes_filepath):
     df[npi_field] = df[npi_field].apply(lambda x: remove_filler_npi(x))
     df_nppes[npi_field] = df_nppes[npi_field].apply(lambda x: remove_filler_npi(x))
     df = df.merge(df_nppes, how='left', on=npi_field)
-    df['Entity Type Code'] = df['Entity Type Code'].fillna('invalid')
+    df['nppes_status'] = df['nppes_status'].fillna('invalid')
     return df

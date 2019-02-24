@@ -29,6 +29,7 @@ def extract_nppes_subset(nppes_path='nppes.csv'):
     df_nppes['nppes_type'] = df_nppes['Provider Organization Name (Legal Business Name)'].apply(lambda x: categorize_type(x))
     df_nppes['nppes_status'] = df_nppes['Entity Type Code'].replace({'1':'active', '2': 'active', np.nan: 'deactivated'})
     df_nppes['NPI Deactivation Date'] = df_nppes.apply(lambda x: correct_deactivation_date(x['NPI Deactivation Date'],x['nppes_status']),axis=1)
+    df_nppes = df_nppes.rename({'NPI Deactivation Date': 'nppes_deactivation_date'}, axis=1)
     
     df_nppes['nppes_name'] = df_nppes['Provider Organization Name (Legal Business Name)'].fillna('') + df_nppes['Provider First Name'].fillna('') + " " + df_nppes['Provider Last Name (Legal Name)'].fillna('')
     df_nppes['nppes_name'] = df_nppes['nppes_name'].str.lower()
