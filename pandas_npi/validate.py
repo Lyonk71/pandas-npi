@@ -38,7 +38,8 @@ def remove_filler_npi(x):
     
 fields = ['NPI',
           'Entity Type Code',
-          'nppes_name']
+          'nppes_name',
+          'NPI Deactivation Date']
         
 def clear_previous(df):
     try:
