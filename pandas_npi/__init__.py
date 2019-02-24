@@ -1,6 +1,13 @@
 import pandas as pd
 import numpy as np
 
+
+# reference abbreviations for street names
+from pkg_resources import resource_filename
+nppes_filepath = resource_filename(__name__, 'nppes_subset.csv')
+
+
+
 def clean_npi_field(dfa, npi_column):
     dfa[npi_column] = dfa[npi_column].astype(str)
     dfa[npi_column] = dfa[npi_column].replace("[.][0-9]+$", '', regex=True)
@@ -31,9 +38,7 @@ def remove_filler_npi(x):
     
 fields = ['NPI',
           'Entity Type Code',
-          'Provider Organization Name (Legal Business Name)',
-          'Provider First Name' ,
-          'Provider Last Name (Legal Name)']
+          'nppes_name']
         
 def clear_previous(df):
     try:
@@ -41,13 +46,9 @@ def clear_previous(df):
     except:
         return df
 
-def validate(df, npi_field, nppes_path='nppes.csv'):
+def validate(df, npi_field, nppes_path=nppes_filepath):
     df = clear_previous(df)
     df_nppes = pd.read_csv(nppes_path, usecols=fields, dtype=str)
-    df_nppes['nppes_name'] = df_nppes['Provider Organization Name (Legal Business Name)'].fillna('') + df_nppes['Provider First Name'].fillna('') + " " + df_nppes['Provider Last Name (Legal Name)'].fillna('')
-    df_nppes['nppes_name'] = df_nppes['nppes_name'].str.lower()
-    df_nppes = df_nppes.drop(columns=['Provider Organization Name (Legal Business Name)', 'Provider First Name', 'Provider Last Name (Legal Name)'])
-    df_nppes['Entity Type Code'] = df_nppes['Entity Type Code'].replace({'1':'provider', '2': 'facility', np.nan: 'deactivated'})
     df_nppes = df_nppes.rename({'NPI': npi_field}, axis=1)
     clean_npi_field(df, npi_field)
     clean_npi_field(df_nppes, npi_field)
