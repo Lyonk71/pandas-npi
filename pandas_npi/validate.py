@@ -49,6 +49,13 @@ def clear_previous(df):
     except:
         return df
 
+def invalid_tag(nstatus, nattribute):
+    if nstatus=='invalid':
+        nattribute = 'invalid'
+        return nattribute
+    else :
+        return nattribute
+    
 def validate(df, npi_field, nppes_path=nppes_filepath):
     df = clear_previous(df)
     df_nppes = pd.read_csv(nppes_path, usecols=fields, dtype=str)
@@ -59,4 +66,7 @@ def validate(df, npi_field, nppes_path=nppes_filepath):
     df_nppes[npi_field] = df_nppes[npi_field].apply(lambda x: remove_filler_npi(x))
     df = df.merge(df_nppes, how='left', on=npi_field)
     df['nppes_status'] = df['nppes_status'].fillna('invalid')
+    df['nppes_name'] = df.apply(lambda x: invalid_tag(x['nppes_status'], x['nppes_name']), axis=1)
+    df['nppes_type'] = df.apply(lambda x: invalid_tag(x['nppes_status'], x['nppes_type']), axis=1)
+  
     return df
