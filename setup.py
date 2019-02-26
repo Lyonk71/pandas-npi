@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 
 setup(name='pandas_npi',
-      version='0.43',
+      version='0.44',
       description='NPI validation made easy with Pandas.',
       url='https://github.com/Lyonk71/pandas-npi',
       author='Keith Lyons',
