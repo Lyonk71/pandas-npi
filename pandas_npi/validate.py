@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os.path
 
 
 
@@ -70,10 +71,11 @@ def validate(df, npi_field, nppes_path=nppes_filepath):
     df = clear_previous(df)
     
     try:
+        os.path.isfile(nppes_path) 
         print("Processing, please wait...")
         df_nppes = pd.read_csv(nppes_path, usecols=fields, dtype=str)
     except:
-        print("Fresh install detected. Definitions missing. Initiating download.")
+        print("Fresh install detected.")
         print("")
         update_definitions()
         print("")
