@@ -10,10 +10,10 @@ nppes_filepath = resource_filename(__name__, 'nppes_subset.csv')
 
 def update_repository():
     try:
-        print("Updating NPPES repository.")
+        print("Downloading NPPES repository. This will take a few minutes...")
         df_nppes = pd.read_csv('https://importdatasets.blob.core.windows.net/npivalidation/nppes_subset.csv')
         df_nppes.to_csv(nppes_filepath)
-        print("Update complete.")          
+        print("Download complete, your repository is up-to-date.")          
     except:
         raise ValueError('Update failed')
 
@@ -70,13 +70,15 @@ def validate(df, npi_field, nppes_path=nppes_filepath):
     df = clear_previous(df)
     
     try:
-        print("Loading repository...")
+        print("Processing, please wait...")
         df_nppes = pd.read_csv(nppes_path, usecols=fields, dtype=str)
     except:
-        print("Initializing repository. Run pandas_npi.update_repository()")
-        print("every month or two to ensure up to date records.")
+        print("NPPES repository not found. Initiating download.")
+        print("")
         update_repository()
-        print("Loading repository...")
+        print("")
+        print("Dowload complete. Now Processing, please wait...")
+
         df_nppes = pd.read_csv(nppes_path, usecols=fields, dtype=str)
     
     df_nppes = df_nppes.rename({'NPI': npi_field}, axis=1)
