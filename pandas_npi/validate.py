@@ -8,12 +8,12 @@ import numpy as np
 from pkg_resources import resource_filename
 nppes_filepath = resource_filename(__name__, 'nppes_subset.csv')
 
-def update_repository():
+def update_definitions():
     try:
-        print("Downloading NPPES repository. This will take a few minutes...")
+        print("Updating definitions. This will take a few minutes...")
         df_nppes = pd.read_csv('https://importdatasets.blob.core.windows.net/npivalidation/nppes_subset.csv')
         df_nppes.to_csv(nppes_filepath)
-        print("Download complete, your repository is up-to-date.")          
+        print("Updates complete, definitions are up-to-date.")          
     except:
         raise ValueError('Update failed')
 
@@ -73,11 +73,11 @@ def validate(df, npi_field, nppes_path=nppes_filepath):
         print("Processing, please wait...")
         df_nppes = pd.read_csv(nppes_path, usecols=fields, dtype=str)
     except:
-        print("NPPES repository not found. Initiating download.")
+        print("Fresh install detected. Definitions missing. Initiating download.")
         print("")
-        update_repository()
+        update_definitions()
         print("")
-        print("Dowload complete. Now Processing, please wait...")
+        print("Processing, please wait...")
 
         df_nppes = pd.read_csv(nppes_path, usecols=fields, dtype=str)
     
