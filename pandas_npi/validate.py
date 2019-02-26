@@ -23,7 +23,7 @@ def clean_npi_field(dfa, npi_column):
     dfa[npi_column] = dfa[npi_column].astype(str)
     dfa[npi_column] = dfa[npi_column].replace("[.][0-9]+$", '', regex=True)
     dfa[npi_column] = dfa[npi_column].replace('[^\d]','', regex=True)
-    dfa = dfa[dfa[npi_column].str.len()==10].copy()
+
 
 def remove_filler_npi(x):
     if x == '9999999999':
