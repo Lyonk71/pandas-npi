@@ -2,10 +2,20 @@ import pandas as pd
 import numpy as np
 
 
-# reference abbreviations for street names
+
+
+# reference nppes_subset
 from pkg_resources import resource_filename
 nppes_filepath = resource_filename(__name__, 'nppes_subset.csv')
 
+def update_repository():
+    try:
+        print("Updating NPPES repository.")
+        df_nppes = pd.read_csv('https://importdatasets.blob.core.windows.net/npivalidation/nppes_subset.csv')
+        df_nppes.to_csv(nppes_filepath)
+        print("Update complete.")          
+    except:
+        raise ValueError('Update failed')
 
 
 def clean_npi_field(dfa, npi_column):
@@ -58,7 +68,17 @@ def invalid_tag(nstatus, nattribute):
     
 def validate(df, npi_field, nppes_path=nppes_filepath):
     df = clear_previous(df)
-    df_nppes = pd.read_csv(nppes_path, usecols=fields, dtype=str)
+    
+    try:
+        print("Loading repository...")
+        df_nppes = pd.read_csv(nppes_path, usecols=fields, dtype=str)
+    except:
+        print("Initializing repository. Run pandas_npi.update_repository()")
+        print("every month or two to ensure up to date records.")
+        update_repository()
+        print("Loading repository...")
+        df_nppes = pd.read_csv(nppes_path, usecols=fields, dtype=str)
+    
     df_nppes = df_nppes.rename({'NPI': npi_field}, axis=1)
     clean_npi_field(df, npi_field)
     clean_npi_field(df_nppes, npi_field)
